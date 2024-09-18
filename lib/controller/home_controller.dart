@@ -13,7 +13,7 @@ class HomeController {
 
       if (response.statusCode == 200) {
         // Log the raw response
-        developer.log('Response Data: ${response.body}');
+        // developer.log('Response Data: ${response.body}');
 
         // Decode the response
         final List<dynamic> responseData = json.decode(response.body);
@@ -22,7 +22,7 @@ class HomeController {
         List<Product> products = responseData.map<Product>((item) {
           return Product.fromMap(item);
         }).toList();
-
+        developer.log('data converted to map: $products');
         return products;
       } else {
         developer.log(

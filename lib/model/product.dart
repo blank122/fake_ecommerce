@@ -6,7 +6,7 @@ class Product {
   int price;
   String description;
   Category category;
-  String image;
+  List<String> image;
   DateTime creationAt;
   DateTime updatedAt;
 
@@ -41,7 +41,7 @@ class Product {
       price: map['price']?.toInt() ?? 0,
       description: map['description'] ?? '',
       category: Category.fromMap(map['category']),
-      image: map['image'] ?? '',
+      image: List<String>.from(map['images'] ?? []),
       creationAt: DateTime.parse(map['creationAt']),
       updatedAt: DateTime.parse(map['updatedAt']),
     );
@@ -51,6 +51,11 @@ class Product {
 
   factory Product.fromJson(String source) =>
       Product.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Product(id: $id, title: $title, price: $price, description: $description, category: $category, image: $image, creationAt: $creationAt, updatedAt: $updatedAt)';
+  }
 }
 
 class Rating {
@@ -122,4 +127,9 @@ class Category {
 
   factory Category.fromJson(String source) =>
       Category.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Category(id: $id, name: $name, image: $image, creationAt: $creationAt, updatedAt: $updatedAt)';
+  }
 }
