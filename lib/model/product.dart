@@ -3,11 +3,12 @@ import 'dart:convert';
 class Product {
   int id;
   String title;
-  double price;
+  int price;
   String description;
-  String category;
+  Category category;
   String image;
-  Rating rating;
+  DateTime creationAt;
+  DateTime updatedAt;
 
   Product({
     required this.id,
@@ -16,7 +17,8 @@ class Product {
     required this.description,
     required this.category,
     required this.image,
-    required this.rating,
+    required this.creationAt,
+    required this.updatedAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,9 +27,10 @@ class Product {
       'title': title,
       'price': price,
       'description': description,
-      'category': category,
+      'category': category.toMap(),
       'image': image,
-      'rating': rating.toMap(),
+      'creationAt': creationAt.millisecondsSinceEpoch,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
   }
 
@@ -35,11 +38,12 @@ class Product {
     return Product(
       id: map['id']?.toInt() ?? 0,
       title: map['title'] ?? '',
-      price: map['price']?.toDouble() ?? 0.0,
+      price: map['price']?.toInt() ?? 0,
       description: map['description'] ?? '',
-      category: map['category'] ?? '',
+      category: Category.fromMap(map['category']),
       image: map['image'] ?? '',
-      rating: Rating.fromMap(map['rating']),
+      creationAt: DateTime.parse(map['creationAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
     );
   }
 
@@ -78,4 +82,44 @@ class Rating {
 
   @override
   String toString() => 'Rating(rate: $rate, count: $count)';
+}
+
+class Category {
+  int id;
+  String name;
+  String image;
+  DateTime creationAt;
+  DateTime updatedAt;
+  Category({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.creationAt,
+    required this.updatedAt,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'image': image,
+      'creationAt': creationAt.millisecondsSinceEpoch,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
+    };
+  }
+
+  factory Category.fromMap(Map<String, dynamic> map) {
+    return Category(
+      id: map['id']?.toInt() ?? 0,
+      name: map['name'] ?? '',
+      image: map['image'] ?? '',
+      creationAt: DateTime.parse(map['creationAt']),
+      updatedAt: DateTime.parse(map['updatedAt']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Category.fromJson(String source) =>
+      Category.fromMap(json.decode(source));
 }

@@ -1,36 +1,39 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:io';
 import 'package:fake_e_commerce/model/product.dart';
 import 'package:http/http.dart' as http;
 
 class HomeController {
   Future<List<Product>?> getProducts() async {
-    final response = await http.get(
-      Uri.parse('https://fakestoreapi.com/products'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    );
-    final responseData = json.decode(response.body);
     try {
+      final response = await http.get(
+        Uri.parse('https://api.escuelajs.co/api/v1/products'),
+      );
+
       if (response.statusCode == 200) {
-        developer.log('Response Data Get res answer: $responseData');
+        // Log the raw response
+        developer.log('Response Data: ${response.body}');
 
-        // Ensure that `responseData['data']` is a map and not null
-        final Map<String, dynamic> dataParsing = responseData['data'];
+        // Decode the response
+        final List<dynamic> responseData = json.decode(response.body);
 
-        // Iterate through the values of the map and create a list of AnswerModel
-        List<Product> datalist = dataParsing.values.map<Product>((map) {
-          return Product.fromMap(map);
+        // Parse the list of products
+        List<Product> products = responseData.map<Product>((item) {
+          return Product.fromMap(item);
         }).toList();
 
-        return datalist;
+        return products;
       } else {
-        developer.log('Response Error: $responseData');
+        developer.log(
+            'Response Error: ${response.statusCode} ${response.reasonPhrase}');
         return null;
       }
+    } on SocketException catch (e) {
+      developer.log('SocketException: ${e.toString()}');
+      return null;
     } on Exception catch (e) {
-      developer.log('Error: ${e.toString()}');
+      developer.log('Exception: ${e.toString()}');
       return null;
     }
   }

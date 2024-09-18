@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getProducts();
   }
 
   Future<void> getProducts() async {
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               const SizedBox(height: 16),
                               Image.network(
-                                productList.image,
+                                productList.category.image,
                                 fit: BoxFit.cover,
                                 width: 100,
                                 height: 100,
